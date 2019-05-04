@@ -15,7 +15,7 @@ import omarrm.ufps.web.apirest.service.UsuarioService;
 
 
 @Service
-public class JpaUserDetailsServiceImpls implements UserDetailsService {
+public class JpaUserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
 	private UsuarioService service;

@@ -40,4 +40,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return (List<Usuario>) repository.findAll();
 	}
 
+	@Override
+	public List<Usuario> findByFilter(String filter) {
+		return (List<Usuario>) repository.findDistinctUsuarioByUsernameLikeOrNombreLike(filter, filter);
+	}
+
 }

@@ -1,12 +1,15 @@
 package omarrm.ufps.web.apirest.controller;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +61,12 @@ public class UsuarioController {
 			return service.save(user);
 		}
 		return null;
+	}
+	
+	@GetMapping("users/{filter}")
+	public List<Usuario> filterUser(@PathVariable String filter) {
+		
+		return service.findByFilter("%"+filter+"%");
 	}
 
 }

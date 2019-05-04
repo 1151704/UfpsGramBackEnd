@@ -17,7 +17,7 @@ import omarrm.ufps.web.apirest.auth.CustomAuthenticationEntryPoint;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-
+		
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

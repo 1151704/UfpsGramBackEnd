@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import omarrm.ufps.web.apirest.auth.filter.JWTAuthenticationFilter;
 import omarrm.ufps.web.apirest.auth.filter.JWTAuthorizationFilter;
 import omarrm.ufps.web.apirest.auth.service.JWTService;
-import omarrm.ufps.web.apirest.service.impl.JpaUserDetailsServiceImpls;
+import omarrm.ufps.web.apirest.service.impl.JpaUserDetailsServiceImpl;
 
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @Configuration
@@ -29,7 +29,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
-	private JpaUserDetailsServiceImpls userDetailsService;
+	private JpaUserDetailsServiceImpl userDetailsService;
 	
 	@Autowired
 	private AccessDeniedHandler accessDeniedHandler;	
@@ -48,12 +48,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrf().disable()
 		.authorizeRequests()
         .antMatchers(HttpMethod.POST, "/user/").permitAll()
-        .antMatchers("/validate/").permitAll()
+        .antMatchers("/validate/","/h2-console/**", "/favicon.ico").permitAll()
         .anyRequest().authenticated().and()
         .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint).and()
         .exceptionHandling().accessDeniedHandler(accessDeniedHandler).and()
 		.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtService))
-		.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtService));
+		.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtService))
+		.headers().frameOptions().sameOrigin();
 
 	}
 

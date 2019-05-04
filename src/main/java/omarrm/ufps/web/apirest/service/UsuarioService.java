@@ -15,5 +15,7 @@ public interface UsuarioService {
 	public Usuario findByUsername(String username);
 
 	public List<Usuario> findAll();
+	
+	public List<Usuario> findByFilter(String filter);
 
 }
