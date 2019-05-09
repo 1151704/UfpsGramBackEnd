@@ -47,4 +47,9 @@ public class AmistadServiceImpl implements AmistadService {
 		repository.deleteById(id);
 	}
 
+	@Override
+	public Amistad findByUsuarioAndAmistad(Usuario usuario, Usuario amistad) {
+		return repository.findByUsuarioAndAmistad(usuario, amistad);
+	}
+
 }

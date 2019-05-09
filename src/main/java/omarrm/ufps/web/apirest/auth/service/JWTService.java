@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.security.core.Authentication;
 
 import io.jsonwebtoken.Claims;
-import omarrm.ufps.web.apirest.entity.Usuario;
 
 public interface JWTService {
 

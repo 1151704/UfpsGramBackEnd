@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import omarrm.ufps.web.apirest.entity.Usuario;
+import omarrm.ufps.web.apirest.model.UsuarioApi;
 import omarrm.ufps.web.apirest.service.UsuarioService;
 
 @RestController
@@ -28,13 +29,13 @@ public class UsuarioController {
 
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
-	
+
 	@GetMapping("")
 	public Usuario get(HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
 		if (principal != null) {
 			Usuario user = service.findByUsername(principal.getName());
-			
+
 			return user;
 		}
 		return null;
@@ -62,11 +63,35 @@ public class UsuarioController {
 		}
 		return null;
 	}
-	
+
 	@GetMapping("users/{filter}")
-	public List<Usuario> filterUser(@PathVariable String filter) {
-		
-		return service.findByFilter("%"+filter+"%");
+	public List<UsuarioApi> filterUser(HttpServletRequest request, @PathVariable String filter) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(principal.getName());
+			return service.busqueda("%" + filter + "%", user);
+		}
+		return new ArrayList<>();
+	}
+	
+	@GetMapping("seguidores")
+	public List<UsuarioApi> seguidores(HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(principal.getName());
+			return service.seguidores(user);
+		}
+		return new ArrayList<>();
+	}
+	
+	@GetMapping("siguiendo")
+	public List<UsuarioApi> siguiendo(HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(principal.getName());
+			return service.siguiendo(user);
+		}
+		return new ArrayList<>();
 	}
 
 }

@@ -12,6 +12,8 @@ public interface AmistadService {
 	
 	public List<Amistad> findByUsuario(Usuario usuario);
 	
+	public Amistad findByUsuarioAndAmistad(Usuario usuario, Usuario amistad);
+	
 	public List<Amistad> findByEstadoAndAmistad(AmistadEstado estado, Usuario amistado);
 	
 	public List<Amistad> findByAmistad(Usuario amistad);

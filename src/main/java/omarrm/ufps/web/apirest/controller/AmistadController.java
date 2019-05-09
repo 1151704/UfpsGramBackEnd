@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import omarrm.ufps.web.apirest.entity.Amistad;
 import omarrm.ufps.web.apirest.entity.AmistadEstado;
 import omarrm.ufps.web.apirest.entity.Usuario;
+import omarrm.ufps.web.apirest.model.UsuarioApi;
 import omarrm.ufps.web.apirest.service.AmistadService;
 import omarrm.ufps.web.apirest.service.UsuarioService;
 
@@ -28,70 +30,6 @@ public class AmistadController {
 
 	@Autowired
 	private UsuarioService usuarioService;
-
-	@GetMapping("solicitudesAceptadas")
-	public List<Amistad> findBySolicitudesAceptadas(HttpServletRequest request) {
-
-		Usuario usuario = getUsuarioActual(request);
-		if (usuario != null) {
-
-			return service.findByEstadoAndUsuario(AmistadEstado.ACEPTADA, usuario);
-
-		}
-
-		return new ArrayList<Amistad>();
-	}
-
-	@GetMapping("solicitudesDenegadas")
-	public List<Amistad> findBySolicitudesDenegadas(HttpServletRequest request) {
-
-		Usuario usuario = getUsuarioActual(request);
-		if (usuario != null) {
-
-			return service.findByEstadoAndUsuario(AmistadEstado.DENEGADA, usuario);
-
-		}
-
-		return new ArrayList<Amistad>();
-	}
-
-	@GetMapping("solicitudesPendientes")
-	public List<Amistad> findBySolicitudesPendientes(HttpServletRequest request) {
-
-		Usuario usuario = getUsuarioActual(request);
-		if (usuario != null) {
-
-			return service.findByEstadoAndUsuario(AmistadEstado.ENVIADA, usuario);
-
-		}
-
-		return new ArrayList<Amistad>();
-	}
-	
-	@GetMapping("misSolicitudesPendientes")
-	public List<Amistad> findByMisSolicitudesPendientes(HttpServletRequest request) {
-
-		Usuario usuario = getUsuarioActual(request);
-		if (usuario != null) {
-
-			return service.findByEstadoAndUsuario(AmistadEstado.ENVIADA, usuario);
-
-		}
-
-		return new ArrayList<Amistad>();
-	}
-
-	public List<Amistad> findByUsuario(Usuario usuario) {
-		return service.findByUsuario(usuario);
-	}
-
-	public List<Amistad> findByEstadoAndAmistad(AmistadEstado estado, Usuario amistado) {
-		return service.findByEstadoAndAmistad(estado, amistado);
-	}
-
-	public List<Amistad> findByAmistad(Usuario amistad) {
-		return service.findByAmistad(amistad);
-	}
 
 	@PostMapping("solicitud/{username}")
 	public Amistad save(HttpServletRequest request,@PathVariable String username) {
@@ -113,9 +51,68 @@ public class AmistadController {
 		return null;
 	}
 
-	public void deleteById(Integer id) {
-		service.deleteById(id);
+	@PostMapping("aceptar/{username}")
+	public Amistad aceptar(HttpServletRequest request,@PathVariable String username) {
+		
+		Usuario yo = getUsuarioActual(request);
+		Usuario otro = usuarioService.findByUsername(username);
+		
+		if (yo != null && otro != null) {
+			
+			/* buscar la solicitud del otro donde este dirigida a mi*/
+			Amistad solicitudOtro = service.findByUsuarioAndAmistad(otro, yo);
+			if (solicitudOtro != null) {
+				
+				/*ACEPTAR SOLICITUD DEL OTRO*/
+				solicitudOtro.setEstado(AmistadEstado.ACEPTADA);
+				return service.save(solicitudOtro);
+								
+			}
+			
+		}
+		return null;
 	}
+	
+	@DeleteMapping("dejarDeSeguir/{username}")
+	public void dejarDeSeguir(HttpServletRequest request,@PathVariable String username) {
+		
+		Usuario yo = getUsuarioActual(request);
+		Usuario otro = usuarioService.findByUsername(username);
+		
+		if (yo != null && otro != null) {
+			
+			/* buscar la solicitud del otro donde este dirigida a mi*/
+			Amistad solicitudMia = service.findByUsuarioAndAmistad(yo, otro);
+			if (solicitudMia != null) {
+				
+				/*ACEPTAR SOLICITUD DEL OTRO*/
+				service.deleteById(solicitudMia.getId());
+								
+			}
+			
+		}
+	}
+	
+	@GetMapping("enviadas")
+	public List<UsuarioApi> enviadas(HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = usuarioService.findByUsername(principal.getName());
+			return usuarioService.solicitudesEnviadas(user);
+		}
+		return new ArrayList<>();
+	}
+
+	@GetMapping("recibidas")
+	public List<UsuarioApi> recibidas(HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = usuarioService.findByUsername(principal.getName());
+			return usuarioService.solicitudesRecibidas(user);
+		}
+		return new ArrayList<>();
+	}
+	
 
 	private Usuario getUsuarioActual(final HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();

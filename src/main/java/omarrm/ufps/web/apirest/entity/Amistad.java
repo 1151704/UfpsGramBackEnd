@@ -28,7 +28,7 @@ public class Amistad implements Serializable {
 	@Column(name = "fecha_solicitud", nullable = false, updatable = false)
 	private Date fechaSolicitud;
 
-	@Enumerated(EnumType.ORDINAL)
+	@Enumerated(EnumType.STRING)
 	private AmistadEstado estado;
 
 	@ManyToOne

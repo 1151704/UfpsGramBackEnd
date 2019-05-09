@@ -12,10 +12,14 @@ public interface AmistadRepository extends CrudRepository<Amistad, Integer> {
 
 	public List<Amistad> findByEstadoAndUsuario(AmistadEstado estado, Usuario usuario);
 	
+	public Amistad findByUsuarioAndAmistad(Usuario usuario, Usuario amistad);
+	
 	public List<Amistad> findByUsuario(Usuario usuario);
 	
 	public List<Amistad> findByEstadoAndAmistad(AmistadEstado estado, Usuario amistado);
 	
 	public List<Amistad> findByAmistad(Usuario amistad);
+	
+	public boolean existsByUsuarioAndAmistadAndEstado(Usuario usuario, Usuario amistad, AmistadEstado estado);
 	
 }
