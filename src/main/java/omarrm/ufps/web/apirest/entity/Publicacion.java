@@ -1,22 +1,26 @@
 package omarrm.ufps.web.apirest.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "publicacion")
@@ -31,19 +35,22 @@ public class Publicacion implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "fecha_publicacion", nullable = false, updatable = false)
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date fechaPublicacion;
 
 	@ManyToOne
 	private Usuario usuario;
 
-	@OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL)
-	private List<Etiqueta> etiquetas;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicacion", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	private Set<Etiqueta> etiquetas;
 
-	@OneToMany(mappedBy = "publicacion", cascade = CascadeType.ALL)
-	private List<Comentario> comentarios;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicacion", cascade = CascadeType.ALL)
+	@JsonManagedReference
+	@OrderBy("fechaPublicacion DESC")
+	private Set<Comentario> comentarios;
 
 	public Publicacion() {
-		this.etiquetas = new ArrayList<Etiqueta>();
 	}
 
 	@PrePersist
@@ -83,28 +90,20 @@ public class Publicacion implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public List<Etiqueta> getEtiquetas() {
+	public Set<Etiqueta> getEtiquetas() {
 		return etiquetas;
 	}
 
-	public void setEtiquetas(List<Etiqueta> etiquetas) {
+	public void setEtiquetas(Set<Etiqueta> etiquetas) {
 		this.etiquetas = etiquetas;
 	}
 
-	public void addEtiqueta(Etiqueta etiqueta) {
-		this.etiquetas.add(etiqueta);
-	}
-
-	public List<Comentario> getComentarios() {
+	public Set<Comentario> getComentarios() {
 		return comentarios;
 	}
 
-	public void setComentarios(List<Comentario> comentarios) {
+	public void setComentarios(Set<Comentario> comentarios) {
 		this.comentarios = comentarios;
-	}
-	
-	public void addComentario(Comentario comentario) {
-		this.comentarios.add(comentario);
 	}
 
 	private static final long serialVersionUID = 1L;

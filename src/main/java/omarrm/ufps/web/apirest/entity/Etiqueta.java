@@ -3,6 +3,7 @@ package omarrm.ufps.web.apirest.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "etiqueta")
@@ -25,7 +28,8 @@ public class Etiqueta implements Serializable {
 	@ManyToOne
 	private Usuario usuario;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonBackReference
 	private Publicacion publicacion;
 
 	@Temporal(TemporalType.TIMESTAMP)

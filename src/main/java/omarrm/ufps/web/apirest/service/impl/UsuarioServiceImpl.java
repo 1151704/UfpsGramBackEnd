@@ -151,4 +151,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return new ArrayList<>();
 	}
 
+	@Override
+	public long seguidoresTotal(Usuario actual) {
+		return amistad.countByEstadoAndAmistad(AmistadEstado.ACEPTADA, actual);
+	}
+
+	@Override
+	public long siguiendoTotal(Usuario actual) {
+		return amistad.countByEstadoAndUsuario(AmistadEstado.ACEPTADA, actual);
+	}
+
 }

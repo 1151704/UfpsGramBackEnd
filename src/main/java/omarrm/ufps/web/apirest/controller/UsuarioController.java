@@ -40,6 +40,17 @@ public class UsuarioController {
 		}
 		return null;
 	}
+	
+	@GetMapping("{username}")
+	public Usuario get(HttpServletRequest request, @PathVariable String username) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(username);
+
+			return user;
+		}
+		return null;
+	}
 
 	@PostMapping("")
 	public Usuario save(@RequestBody Usuario usuario) {
@@ -73,7 +84,7 @@ public class UsuarioController {
 		}
 		return new ArrayList<>();
 	}
-	
+
 	@GetMapping("seguidores")
 	public List<UsuarioApi> seguidores(HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
@@ -83,7 +94,7 @@ public class UsuarioController {
 		}
 		return new ArrayList<>();
 	}
-	
+
 	@GetMapping("siguiendo")
 	public List<UsuarioApi> siguiendo(HttpServletRequest request) {
 		Principal principal = request.getUserPrincipal();
@@ -92,6 +103,26 @@ public class UsuarioController {
 			return service.siguiendo(user);
 		}
 		return new ArrayList<>();
+	}
+
+	@GetMapping("seguidores/{username}")
+	public long seguidoresTotal(HttpServletRequest request, @PathVariable String username) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(principal.getName());
+			return service.siguiendoTotal(user);
+		}
+		return 0;
+	}
+
+	@GetMapping("siguiendo/{username}")
+	public long siguiendoTotal(HttpServletRequest request, @PathVariable String username) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = service.findByUsername(username);
+			return service.siguiendoTotal(user);
+		}
+		return 0;
 	}
 
 }

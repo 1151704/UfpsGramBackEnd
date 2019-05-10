@@ -94,7 +94,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 		response.getWriter().write(new ObjectMapper().writeValueAsString(body));
 		response.setStatus(401);
 		response.setContentType("application/json");	
-		return;
+		
 	}
 
 }

@@ -21,12 +21,16 @@ public interface UsuarioService {
 
 	public List<UsuarioApi> seguidores(Usuario actual);
 
+	public long seguidoresTotal(Usuario actual);
+
 	public List<UsuarioApi> siguiendo(Usuario actual);
 
+	public long siguiendoTotal(Usuario actual);
+
 	public List<UsuarioApi> busqueda(String filter, Usuario actual);
-	
+
 	public List<UsuarioApi> solicitudesRecibidas(Usuario actual);
-	
+
 	public List<UsuarioApi> solicitudesEnviadas(Usuario actual);
 
 }
