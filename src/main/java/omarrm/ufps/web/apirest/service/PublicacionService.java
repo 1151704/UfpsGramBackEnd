@@ -9,6 +9,8 @@ public interface PublicacionService {
 	
 	public List<Publicacion> findByUsuario(Usuario usuario);
 	
+	public List<Publicacion> findByAmigos(Usuario usuario);
+	
 	public Publicacion save(Publicacion publicacion);
 	
 	public Publicacion findById(Integer id);

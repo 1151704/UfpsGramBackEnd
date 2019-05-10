@@ -33,9 +33,12 @@ public class Publicacion implements Serializable {
 	@Column(name = "descripcion")
 	private String descripcion;
 
+	@Column(name = "url_imagen")
+	private String urlImagen;
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "fecha_publicacion", nullable = false, updatable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Bogota")
 	private Date fechaPublicacion;
 
 	@ManyToOne
@@ -43,6 +46,7 @@ public class Publicacion implements Serializable {
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicacion", cascade = CascadeType.ALL)
 	@JsonManagedReference
+	@OrderBy("mensaje ASC")
 	private Set<Etiqueta> etiquetas;
 
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "publicacion", cascade = CascadeType.ALL)
@@ -104,6 +108,14 @@ public class Publicacion implements Serializable {
 
 	public void setComentarios(Set<Comentario> comentarios) {
 		this.comentarios = comentarios;
+	}
+
+	public String getUrlImagen() {
+		return urlImagen;
+	}
+
+	public void setUrlImagen(String urlImagen) {
+		this.urlImagen = urlImagen;
 	}
 
 	private static final long serialVersionUID = 1L;

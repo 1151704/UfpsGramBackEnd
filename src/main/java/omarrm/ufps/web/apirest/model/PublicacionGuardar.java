@@ -7,6 +7,8 @@ public class PublicacionGuardar implements Serializable {
 
 	private String descripcion;
 
+	private String imagen;
+
 	private String[] etiquetas;
 
 	public String getDescripcion() {
@@ -15,6 +17,14 @@ public class PublicacionGuardar implements Serializable {
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public String getImagen() {
+		return imagen;
+	}
+
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 
 	public String[] getEtiquetas() {

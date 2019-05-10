@@ -45,6 +45,7 @@ public class PublicacionController {
 
 				p.setUsuario(user);
 				p.setDescripcion(data.getDescripcion());
+				p.setUrlImagen(data.getImagen());
 
 				if (data.getEtiquetas() != null) {
 					Etiqueta e;
@@ -77,6 +78,20 @@ public class PublicacionController {
 			if (user != null) {
 
 				return service.findByUsuario(user);
+			}
+
+		}
+		return new ArrayList<>();
+	}
+
+	@GetMapping("amigos")
+	public List<Publicacion> publicacionesMisAmigos(HttpServletRequest request) {
+		Principal principal = request.getUserPrincipal();
+		if (principal != null) {
+			Usuario user = usuarioService.findByUsername(principal.getName());
+			if (user != null) {
+
+				return service.findByAmigos(user);
 			}
 
 		}
@@ -117,10 +132,9 @@ public class PublicacionController {
 					p.getComentarios().add(c);
 
 					service.save(p);
-					
+
 					return service.findById(idPublicacion);
 				}
-
 
 			}
 		}

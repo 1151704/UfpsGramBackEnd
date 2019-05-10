@@ -15,7 +15,7 @@ public class PublicacionServiceImpl implements PublicacionService {
 
 	@Autowired
 	private PublicacionRepository repository;
-	
+
 	@Override
 	public List<Publicacion> findByUsuario(Usuario usuario) {
 		return repository.findByUsuarioOrderByFechaPublicacionDesc(usuario);
@@ -34,6 +34,11 @@ public class PublicacionServiceImpl implements PublicacionService {
 	@Override
 	public void deleteById(Integer id) {
 		repository.deleteById(id);
+	}
+
+	@Override
+	public List<Publicacion> findByAmigos(Usuario usuario) {
+		return repository.findByAmigos(usuario);
 	}
 
 }
